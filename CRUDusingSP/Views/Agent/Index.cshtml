@@ -1,0 +1,115 @@
+﻿@model IEnumerable<CRUDusingSP.Models.PageAgentList_Result>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+
+    @using (Html.BeginForm("Index", "Agent", FormMethod.Get))
+    {
+        <text><b>SearchByName:</b></text>
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-info" />
+    }
+</p>
+@using (Html.BeginForm("Index", "Agent"))
+{
+    <table class="table">
+        <tr>
+            @Html.Hidden("SearchString", value:Request.QueryString["SearchString"])
+            @Html.Hidden("SortColumn", value: Request.QueryString["SortColumn"])
+            @Html.Hidden("SortOrder", value: Request.QueryString["SortOrder"])
+            <th>
+                @Html.ActionLink("AgentName", "Index", new { SortColumn = 2, SortOrder = ViewBag.NameSortParam, SearchString = Request.QueryString["SearchString"], Cpage = ViewBag.CPage })
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkingArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Commission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkingArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commission)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.AgentCode }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.AgentCode })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            @* <td>
+                    <a class="pages" href="javascript:Prev()">Prev</a>
+                </td>*@
+            @for (int i = 1; i <= ViewBag.PageCount; i++)
+            {
+                <td>
+                    @if (i != ViewBag.CPage)
+                    {
+                        <a class="pages" href="javascript:Goto(@i);">@i</a>
+                    }
+                    else
+                    {
+                        <span class="pages">@i</span>
+                    }
+                </td>
+            }
+            @*<td><a class="pages" href="javascript:Next();">Next</a></td>*@
+        </tr>
+    </table>
+    <input type="hidden" id="curpageidx" name="Cpage" />
+}
+<script type="text/javascript">
+    function Prev() {
+        var idx = document.getElementById("curpageidx").value;
+        if (idx - 1 > 0) {
+            alert(idx);
+            document.getElementById("curpageidx").a = idx - 1;
+            document.forms[1].submit();
+        }
+    }
+    function Goto(index) {
+        document.getElementById("curpageidx").value = index;
+        document.forms[1].submit();
+    }
+    function Next() {
+        var idx = document.getElementById("curpageidx").value;
+        alert(idx);
+        if (idx + 1 <=@ViewBag.PageCount) {
+            document.getElementById("curpageidx").value = idx - 1;
+        document.forms[1].submit();
+        }
+    }
+</script>

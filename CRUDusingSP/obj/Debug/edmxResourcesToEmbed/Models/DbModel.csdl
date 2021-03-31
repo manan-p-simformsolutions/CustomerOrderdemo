@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SPPracticeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Agent">
+    <Key>
+      <PropertyRef Name="AgentCode" />
+    </Key>
+    <Property Name="AgentCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WorkingArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Commission" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Customers" Relationship="Self.FK_Customers_Agent" FromRole="Agent" ToRole="Customers" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CustomerCode" />
+    </Key>
+    <Property Name="CustomerCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WorkingArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Gread" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OpeningAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="RecevingAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="PaymentAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="OutstandingAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AgentCode" Type="Int32" />
+    <NavigationProperty Name="Agent" Relationship="Self.FK_Customers_Agent" FromRole="Customers" ToRole="Agent" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderNum" />
+    </Key>
+    <Property Name="OrderNum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="AdvanceAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="OrderDate" Type="DateTime" Precision="0" />
+    <Property Name="CustomerCode" Type="Int32" Nullable="false" />
+    <Property Name="OrderDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
+  </EntityType>
+  <Association Name="FK_Customers_Agent">
+    <End Role="Agent" Type="Self.Agent" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Customers" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agent">
+        <PropertyRef Name="AgentCode" />
+      </Principal>
+      <Dependent Role="Customers">
+        <PropertyRef Name="AgentCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_Customers">
+    <End Role="Customers" Type="Self.Customer" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerCode" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="CustomerCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SPPracticeEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Agents" EntityType="Self.Agent" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <AssociationSet Name="FK_Customers_Agent" Association="Self.FK_Customers_Agent">
+      <End Role="Agent" EntitySet="Agents" />
+      <End Role="Customers" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <FunctionImport Name="AddAgent">
+      <Parameter Name="AgentName" Mode="In" Type="String" />
+      <Parameter Name="WorkingArea" Mode="In" Type="String" />
+      <Parameter Name="Commision" Mode="In" Type="String" />
+      <Parameter Name="PhoneNo" Mode="In" Type="String" />
+      <Parameter Name="Country" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="AddCustomer">
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="CustomerCity" Mode="In" Type="String" />
+      <Parameter Name="WorkingArea" Mode="In" Type="String" />
+      <Parameter Name="CustomerCountry" Mode="In" Type="String" />
+      <Parameter Name="Grade" Mode="In" Type="String" />
+      <Parameter Name="OpeningAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="RecevingAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="PaymentAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="OutstandingAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="PhoneNo" Mode="In" Type="String" />
+      <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="AddOrder">
+      <Parameter Name="OrderAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="AdvanceAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+      <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+      <Parameter Name="OrderDescription" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="AgentList" ReturnType="Collection(SPPracticeModel.AgentList_Result)">
+      <Parameter Name="Search" Mode="In" Type="String" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="SortOrder" Mode="In" Type="String" />
+      <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CustomerList" ReturnType="Collection(SPPracticeModel.CustomerList_Result)">
+      <Parameter Name="Search" Mode="In" Type="String" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="SortOrder" Mode="In" Type="String" />
+      <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteAgent">
+      <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteCustomer">
+      <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteOrder">
+      <Parameter Name="OrderNum" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="FindAgent" ReturnType="Collection(SPPracticeModel.FindAgent_Result)">
+      <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="FindCustomer" ReturnType="Collection(SPPracticeModel.FindCustomer_Result)">
+      <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="FindOrder" ReturnType="Collection(SPPracticeModel.FindOrder_Result)">
+      <Parameter Name="OrderNum" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="OrderList" ReturnType="Collection(SPPracticeModel.OrderList_Result)">
+      <Parameter Name="Search" Mode="In" Type="String" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="SortOrder" Mode="In" Type="String" />
+      <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PageAgentList" ReturnType="Collection(SPPracticeModel.PageAgentList_Result)">
+      <Parameter Name="Search" Mode="In" Type="String" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="SortOrder" Mode="In" Type="String" />
+      <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ShowList" ReturnType="Collection(SPPracticeModel.ShowList_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="Startdate" Mode="In" Type="DateTime" />
+      <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+      <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+      <Parameter Name="SortOrder" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateAgent">
+      <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+      <Parameter Name="AgentName" Mode="In" Type="String" />
+      <Parameter Name="WorkingArea" Mode="In" Type="String" />
+      <Parameter Name="Commision" Mode="In" Type="String" />
+      <Parameter Name="PhoneNo" Mode="In" Type="String" />
+      <Parameter Name="Country" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateCustomer">
+      <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="CustomerCity" Mode="In" Type="String" />
+      <Parameter Name="WorkingArea" Mode="In" Type="String" />
+      <Parameter Name="CustomerCountry" Mode="In" Type="String" />
+      <Parameter Name="Grade" Mode="In" Type="String" />
+      <Parameter Name="OpeningAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="RecevingAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="PaymentAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="OutstandingAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="PhoneNo" Mode="In" Type="String" />
+      <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="UpdeteOrder">
+      <Parameter Name="OrderNum" Mode="In" Type="Int32" />
+      <Parameter Name="OrderAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="AdvanceAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+      <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+      <Parameter Name="OrderDescription" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="AgentList_Result">
+    <Property Type="Int32" Name="AgentCode" Nullable="false" />
+    <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Commission" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CustomerList_Result">
+    <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+    <Property Type="Int32" Name="AgentCode" Nullable="true" />
+    <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="101" />
+    <Property Type="String" Name="CustomerCity" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CustomerCountry" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Gread" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="OpeningAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="RecevingAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="PaymentAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="OutstandingAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="FindAgent_Result">
+    <Property Type="Int32" Name="AgentCode" Nullable="false" />
+    <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Commission" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="FindCustomer_Result">
+    <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CustomerCity" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CustomerCountry" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Gread" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="OpeningAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="RecevingAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="PaymentAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="OutstandingAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="AgentCode" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="FindOrder_Result">
+    <Property Type="Int32" Name="OrderNum" Nullable="false" />
+    <Property Type="Decimal" Name="OrderAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="AdvanceAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="DateTime" Name="OrderDate" Nullable="true" />
+    <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+    <Property Type="String" Name="OrderDescription" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="OrderList_Result">
+    <Property Type="Int32" Name="OrderNum" Nullable="false" />
+    <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+    <Property Type="Decimal" Name="OrderAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="Decimal" Name="AdvanceAmount" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="DateTime" Name="OrderDate" Nullable="true" />
+    <Property Type="String" Name="OrderDescription" Nullable="true" />
+    <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="101" />
+    <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="PageAgentList_Result">
+    <Property Type="Int32" Name="AgentCode" Nullable="false" />
+    <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Commission" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ShowList_Result">
+    <Property Type="Decimal" Name="Summation" Nullable="true" Precision="38" Scale="0" />
+    <Property Type="DateTime" Name="OrderDate" Nullable="true" />
+    <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+  </ComplexType>
+</Schema>

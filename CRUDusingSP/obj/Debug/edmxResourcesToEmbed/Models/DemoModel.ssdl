@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SPPracticeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Agent">
+    <Key>
+      <PropertyRef Name="AgentCode" />
+    </Key>
+    <Property Name="AgentCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AgentName" Type="nvarchar" MaxLength="50" />
+    <Property Name="WorkingArea" Type="nvarchar" MaxLength="50" />
+    <Property Name="Commission" Type="nvarchar" MaxLength="50" />
+    <Property Name="PhoneNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="CustomerCode" />
+    </Key>
+    <Property Name="CustomerCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerCity" Type="nvarchar" MaxLength="50" />
+    <Property Name="WorkingArea" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerCountry" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gread" Type="nvarchar" MaxLength="50" />
+    <Property Name="OpeningAmount" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="RecevingAmount" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="PaymentAmount" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="OutstandingAmount" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="PhoneNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AgentCode" Type="int" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="OrderNum" />
+    </Key>
+    <Property Name="OrderNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderAmount" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="AdvanceAmount" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="CustomerCode" Type="int" Nullable="false" />
+    <Property Name="OrderDescription" Type="nvarchar(max)" />
+  </EntityType>
+  <Association Name="FK_Customers_Agent">
+    <End Role="Agent" Type="Self.Agent" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agent">
+        <PropertyRef Name="AgentCode" />
+      </Principal>
+      <Dependent Role="Customers">
+        <PropertyRef Name="AgentCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerCode" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="CustomerCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="AddAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="AgentName" Type="nvarchar" Mode="In" />
+    <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+    <Parameter Name="Commision" Type="nvarchar" Mode="In" />
+    <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+    <Parameter Name="Country" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="AddCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+    <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+    <Parameter Name="CustomerCity" Type="nvarchar" Mode="In" />
+    <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+    <Parameter Name="CustomerCountry" Type="nvarchar" Mode="In" />
+    <Parameter Name="Grade" Type="nvarchar" Mode="In" />
+    <Parameter Name="OpeningAmount" Type="numeric" Mode="In" />
+    <Parameter Name="RecevingAmount" Type="numeric" Mode="In" />
+    <Parameter Name="PaymentAmount" Type="numeric" Mode="In" />
+    <Parameter Name="OutstandingAmount" Type="numeric" Mode="In" />
+    <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+    <Parameter Name="AgentCode" Type="int" Mode="In" />
+  </Function>
+  <Function Name="AddOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderAmount" Type="numeric" Mode="In" />
+    <Parameter Name="AdvanceAmount" Type="numeric" Mode="In" />
+    <Parameter Name="OrderDate" Type="date" Mode="In" />
+    <Parameter Name="CustomerCode" Type="int" Mode="In" />
+    <Parameter Name="OrderDescription" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="AgentList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Search" Type="varchar" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+    <Parameter Name="SortColumn" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CustomerList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Search" Type="varchar" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+    <Parameter Name="SortColumn" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DeleteAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="AgentCode" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DeleteCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CustomerCode" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DeleteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderNum" Type="int" Mode="In" />
+  </Function>
+  <Function Name="FindAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="AgentCode" Type="int" Mode="In" />
+  </Function>
+  <Function Name="FindCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CustomerCode" Type="int" Mode="In" />
+  </Function>
+  <Function Name="FindOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderNum" Type="int" Mode="In" />
+  </Function>
+  <Function Name="OrderList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Search" Type="varchar" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+    <Parameter Name="SortColumn" Type="int" Mode="In" />
+  </Function>
+  <Function Name="PageAgentList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Search" Type="varchar" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+    <Parameter Name="SortColumn" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ShowList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="Startdate" Type="date" Mode="In" />
+    <Parameter Name="EndDate" Type="date" Mode="In" />
+    <Parameter Name="SortColumn" Type="int" Mode="In" />
+    <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="UpdateAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="AgentCode" Type="int" Mode="In" />
+    <Parameter Name="AgentName" Type="nvarchar" Mode="In" />
+    <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+    <Parameter Name="Commision" Type="nvarchar" Mode="In" />
+    <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+    <Parameter Name="Country" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="UpdateCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CustomerCode" Type="int" Mode="In" />
+    <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+    <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+    <Parameter Name="CustomerCity" Type="nvarchar" Mode="In" />
+    <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+    <Parameter Name="CustomerCountry" Type="nvarchar" Mode="In" />
+    <Parameter Name="Grade" Type="nvarchar" Mode="In" />
+    <Parameter Name="OpeningAmount" Type="numeric" Mode="In" />
+    <Parameter Name="RecevingAmount" Type="numeric" Mode="In" />
+    <Parameter Name="PaymentAmount" Type="numeric" Mode="In" />
+    <Parameter Name="OutstandingAmount" Type="numeric" Mode="In" />
+    <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+    <Parameter Name="AgentCode" Type="int" Mode="In" />
+  </Function>
+  <Function Name="UpdeteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderNum" Type="int" Mode="In" />
+    <Parameter Name="OrderAmount" Type="numeric" Mode="In" />
+    <Parameter Name="AdvanceAmount" Type="numeric" Mode="In" />
+    <Parameter Name="OrderDate" Type="date" Mode="In" />
+    <Parameter Name="CustomerCode" Type="int" Mode="In" />
+    <Parameter Name="OrderDescription" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <EntityContainer Name="SPPracticeModelStoreContainer">
+    <EntitySet Name="Agent" EntityType="Self.Agent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Customers_Agent" Association="Self.FK_Customers_Agent">
+      <End Role="Agent" EntitySet="Agent" />
+      <End Role="Customers" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

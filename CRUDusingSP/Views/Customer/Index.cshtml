@@ -1,0 +1,148 @@
+﻿@model IEnumerable<CRUDusingSP.Models.CustomerList_Result>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    @using (Html.BeginForm("Index", "Customer", FormMethod.Get))
+    {
+        <text><b>SearchByName:</b></text>
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-info" />
+    }
+</p>
+@using (Html.BeginForm("Index", "Customer"))
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("CustomerName", "Index", new { SortColumn = 2, SortOrder = ViewBag.NameSortParam, SearchString = Request.QueryString["SearchString"], Cpage = ViewBag.CPage })
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Working Area
+            </th>
+            <th>
+                Country
+            </th>
+            <th>
+                Gread
+            </th>
+            <th>
+                Opening Amount
+            </th>
+            <th>
+                Receving Amount
+            </th>
+            <th>
+                Payment Amount
+            </th>
+            <th>
+                Outstanding Amount
+            </th>
+            <th>
+                PhoneNo
+            </th>
+            <th>
+                Agent Name
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @Html.HiddenFor(model => item.AgentCode)
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerCity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkingArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerCountry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gread)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpeningAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RecevingAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OutstandingAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgentName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CustomerCode }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CustomerCode })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            @* <td>
+                    <a class="pages" href="javascript:Prev()">Prev</a>
+                </td>*@
+            @for (int i = 1; i <= ViewBag.PageCount; i++)
+            {
+                <td>
+                    @if (i != ViewBag.CPage)
+                    {
+                        <a class="pages" href="javascript:Goto(@i);">@i</a>
+                    }
+                    else
+                    {
+                        <span class="pages">@i</span>
+                    }
+                </td>
+            }
+            @*<td><a class="pages" href="javascript:Next();">Next</a></td>*@
+        </tr>
+    </table>
+    <input type="hidden" id="curpageidx" name="Cpage" />
+}
+<script type="text/javascript">
+    function Prev() {
+        var idx = document.getElementById("curpageidx").value;
+        if (idx - 1 > 0) {
+            alert(idx);
+            document.getElementById("curpageidx").a = idx - 1;
+            document.forms[1].submit();
+        }
+    }
+    function Goto(index) {
+        document.getElementById("curpageidx").value = index;
+        document.forms[1].submit();
+    }
+    function Next() {
+        var idx = document.getElementById("curpageidx").value;
+        alert(idx);
+        if (idx + 1 <=@ViewBag.PageCount) {
+            document.getElementById("curpageidx").value = idx - 1;
+        document.forms[1].submit();
+        }
+    }
+</script>

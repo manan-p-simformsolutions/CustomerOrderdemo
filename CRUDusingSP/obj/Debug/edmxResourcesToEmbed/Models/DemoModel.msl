@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SPPracticeModelStoreContainer" CdmEntityContainer="SPPracticeEntities">
+    <EntitySetMapping Name="Agents">
+      <EntityTypeMapping TypeName="SPPracticeModel.Agent">
+        <MappingFragment StoreEntitySet="Agent">
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+          <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Customers">
+      <EntityTypeMapping TypeName="SPPracticeModel.Customer">
+        <MappingFragment StoreEntitySet="Customers">
+          <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="CustomerCountry" ColumnName="CustomerCountry" />
+          <ScalarProperty Name="Gread" ColumnName="Gread" />
+          <ScalarProperty Name="OpeningAmount" ColumnName="OpeningAmount" />
+          <ScalarProperty Name="RecevingAmount" ColumnName="RecevingAmount" />
+          <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+          <ScalarProperty Name="OutstandingAmount" ColumnName="OutstandingAmount" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="SPPracticeModel.Order">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+          <ScalarProperty Name="OrderAmount" ColumnName="OrderAmount" />
+          <ScalarProperty Name="AdvanceAmount" ColumnName="AdvanceAmount" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+          <ScalarProperty Name="OrderDescription" ColumnName="OrderDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="AddAgent" FunctionName="SPPracticeModel.Store.AddAgent" />
+    <FunctionImportMapping FunctionImportName="AddCustomer" FunctionName="SPPracticeModel.Store.AddCustomer" />
+    <FunctionImportMapping FunctionImportName="AddOrder" FunctionName="SPPracticeModel.Store.AddOrder" />
+    <FunctionImportMapping FunctionImportName="AgentList" FunctionName="SPPracticeModel.Store.AgentList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.AgentList_Result">
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+          <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CustomerList" FunctionName="SPPracticeModel.Store.CustomerList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.CustomerList_Result">
+          <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="CustomerCountry" ColumnName="CustomerCountry" />
+          <ScalarProperty Name="Gread" ColumnName="Gread" />
+          <ScalarProperty Name="OpeningAmount" ColumnName="OpeningAmount" />
+          <ScalarProperty Name="RecevingAmount" ColumnName="RecevingAmount" />
+          <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+          <ScalarProperty Name="OutstandingAmount" ColumnName="OutstandingAmount" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+          <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="DeleteAgent" FunctionName="SPPracticeModel.Store.DeleteAgent" />
+    <FunctionImportMapping FunctionImportName="DeleteCustomer" FunctionName="SPPracticeModel.Store.DeleteCustomer" />
+    <FunctionImportMapping FunctionImportName="DeleteOrder" FunctionName="SPPracticeModel.Store.DeleteOrder" />
+    <FunctionImportMapping FunctionImportName="FindAgent" FunctionName="SPPracticeModel.Store.FindAgent">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.FindAgent_Result">
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+          <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="FindCustomer" FunctionName="SPPracticeModel.Store.FindCustomer">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.FindCustomer_Result">
+          <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="CustomerCountry" ColumnName="CustomerCountry" />
+          <ScalarProperty Name="Gread" ColumnName="Gread" />
+          <ScalarProperty Name="OpeningAmount" ColumnName="OpeningAmount" />
+          <ScalarProperty Name="RecevingAmount" ColumnName="RecevingAmount" />
+          <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+          <ScalarProperty Name="OutstandingAmount" ColumnName="OutstandingAmount" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="FindOrder" FunctionName="SPPracticeModel.Store.FindOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.FindOrder_Result">
+          <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+          <ScalarProperty Name="OrderAmount" ColumnName="OrderAmount" />
+          <ScalarProperty Name="AdvanceAmount" ColumnName="AdvanceAmount" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+          <ScalarProperty Name="OrderDescription" ColumnName="OrderDescription" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="OrderList" FunctionName="SPPracticeModel.Store.OrderList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.OrderList_Result">
+          <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+          <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+          <ScalarProperty Name="OrderAmount" ColumnName="OrderAmount" />
+          <ScalarProperty Name="AdvanceAmount" ColumnName="AdvanceAmount" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderDescription" ColumnName="OrderDescription" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="PageAgentList" FunctionName="SPPracticeModel.Store.PageAgentList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.PageAgentList_Result">
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+          <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+          <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ShowList" FunctionName="SPPracticeModel.Store.ShowList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SPPracticeModel.ShowList_Result">
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Summation" ColumnName="Summation" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+          <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="UpdateAgent" FunctionName="SPPracticeModel.Store.UpdateAgent" />
+    <FunctionImportMapping FunctionImportName="UpdateCustomer" FunctionName="SPPracticeModel.Store.UpdateCustomer" />
+    <FunctionImportMapping FunctionImportName="UpdeteOrder" FunctionName="SPPracticeModel.Store.UpdeteOrder" />
+  </EntityContainerMapping>
+</Mapping>

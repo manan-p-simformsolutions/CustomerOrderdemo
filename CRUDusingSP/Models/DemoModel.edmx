@@ -1,0 +1,681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SPPracticeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Agent">
+          <Key>
+            <PropertyRef Name="AgentCode" />
+          </Key>
+          <Property Name="AgentCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AgentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="WorkingArea" Type="nvarchar" MaxLength="50" />
+          <Property Name="Commission" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerCode" />
+          </Key>
+          <Property Name="CustomerCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerCity" Type="nvarchar" MaxLength="50" />
+          <Property Name="WorkingArea" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gread" Type="nvarchar" MaxLength="50" />
+          <Property Name="OpeningAmount" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="RecevingAmount" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="PaymentAmount" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="OutstandingAmount" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="PhoneNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgentCode" Type="int" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderNum" />
+          </Key>
+          <Property Name="OrderNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderAmount" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="AdvanceAmount" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="OrderDate" Type="date" />
+          <Property Name="CustomerCode" Type="int" Nullable="false" />
+          <Property Name="OrderDescription" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_Customers_Agent">
+          <End Role="Agent" Type="Self.Agent" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Agent">
+              <PropertyRef Name="AgentCode" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AgentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerCode" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AgentName" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+          <Parameter Name="Commision" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Country" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCity" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCountry" Type="nvarchar" Mode="In" />
+          <Parameter Name="Grade" Type="nvarchar" Mode="In" />
+          <Parameter Name="OpeningAmount" Type="numeric" Mode="In" />
+          <Parameter Name="RecevingAmount" Type="numeric" Mode="In" />
+          <Parameter Name="PaymentAmount" Type="numeric" Mode="In" />
+          <Parameter Name="OutstandingAmount" Type="numeric" Mode="In" />
+          <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="AgentCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderAmount" Type="numeric" Mode="In" />
+          <Parameter Name="AdvanceAmount" Type="numeric" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="CustomerCode" Type="int" Mode="In" />
+          <Parameter Name="OrderDescription" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="AgentList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Search" Type="varchar" Mode="In" />
+          <Parameter Name="PageNumber" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+          <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+          <Parameter Name="SortColumn" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CustomerList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Search" Type="varchar" Mode="In" />
+          <Parameter Name="PageNumber" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+          <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+          <Parameter Name="SortColumn" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AgentCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNum" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FindAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AgentCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FindCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FindOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNum" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OrderList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Search" Type="varchar" Mode="In" />
+          <Parameter Name="PageNumber" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+          <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+          <Parameter Name="SortColumn" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PageAgentList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Search" Type="varchar" Mode="In" />
+          <Parameter Name="PageNumber" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+          <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+          <Parameter Name="SortColumn" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ShowList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PageNumber" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+          <Parameter Name="Startdate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+          <Parameter Name="SortColumn" Type="int" Mode="In" />
+          <Parameter Name="SortOrder" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateAgent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AgentCode" Type="int" Mode="In" />
+          <Parameter Name="AgentName" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+          <Parameter Name="Commision" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Country" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerCode" Type="int" Mode="In" />
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCity" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkingArea" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCountry" Type="nvarchar" Mode="In" />
+          <Parameter Name="Grade" Type="nvarchar" Mode="In" />
+          <Parameter Name="OpeningAmount" Type="numeric" Mode="In" />
+          <Parameter Name="RecevingAmount" Type="numeric" Mode="In" />
+          <Parameter Name="PaymentAmount" Type="numeric" Mode="In" />
+          <Parameter Name="OutstandingAmount" Type="numeric" Mode="In" />
+          <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="AgentCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdeteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNum" Type="int" Mode="In" />
+          <Parameter Name="OrderAmount" Type="numeric" Mode="In" />
+          <Parameter Name="AdvanceAmount" Type="numeric" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="CustomerCode" Type="int" Mode="In" />
+          <Parameter Name="OrderDescription" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="SPPracticeModelStoreContainer">
+          <EntitySet Name="Agent" EntityType="Self.Agent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Customers_Agent" Association="Self.FK_Customers_Agent">
+            <End Role="Agent" EntitySet="Agent" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SPPracticeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Agent">
+          <Key>
+            <PropertyRef Name="AgentCode" />
+          </Key>
+          <Property Name="AgentCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WorkingArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Commission" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK_Customers_Agent" FromRole="Agent" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerCode" />
+          </Key>
+          <Property Name="CustomerCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WorkingArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gread" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="RecevingAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="PaymentAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="OutstandingAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AgentCode" Type="Int32" />
+          <NavigationProperty Name="Agent" Relationship="Self.FK_Customers_Agent" FromRole="Customers" ToRole="Agent" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderNum" />
+          </Key>
+          <Property Name="OrderNum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="AdvanceAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="OrderDate" Type="DateTime" Precision="0" />
+          <Property Name="CustomerCode" Type="Int32" Nullable="false" />
+          <Property Name="OrderDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
+        </EntityType>
+        <Association Name="FK_Customers_Agent">
+          <End Role="Agent" Type="Self.Agent" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Customers" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Agent">
+              <PropertyRef Name="AgentCode" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AgentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerCode" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SPPracticeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Agents" EntityType="Self.Agent" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <AssociationSet Name="FK_Customers_Agent" Association="Self.FK_Customers_Agent">
+            <End Role="Agent" EntitySet="Agents" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <FunctionImport Name="AddAgent">
+            <Parameter Name="AgentName" Mode="In" Type="String" />
+            <Parameter Name="WorkingArea" Mode="In" Type="String" />
+            <Parameter Name="Commision" Mode="In" Type="String" />
+            <Parameter Name="PhoneNo" Mode="In" Type="String" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddCustomer">
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="CustomerCity" Mode="In" Type="String" />
+            <Parameter Name="WorkingArea" Mode="In" Type="String" />
+            <Parameter Name="CustomerCountry" Mode="In" Type="String" />
+            <Parameter Name="Grade" Mode="In" Type="String" />
+            <Parameter Name="OpeningAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="RecevingAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="PaymentAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="OutstandingAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="PhoneNo" Mode="In" Type="String" />
+            <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddOrder">
+            <Parameter Name="OrderAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="AdvanceAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+            <Parameter Name="OrderDescription" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AgentList" ReturnType="Collection(SPPracticeModel.AgentList_Result)">
+            <Parameter Name="Search" Mode="In" Type="String" />
+            <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+            <Parameter Name="SortOrder" Mode="In" Type="String" />
+            <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CustomerList" ReturnType="Collection(SPPracticeModel.CustomerList_Result)">
+            <Parameter Name="Search" Mode="In" Type="String" />
+            <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+            <Parameter Name="SortOrder" Mode="In" Type="String" />
+            <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteAgent">
+          <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteCustomer">
+          <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteOrder">
+          <Parameter Name="OrderNum" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FindAgent" ReturnType="Collection(SPPracticeModel.FindAgent_Result)">
+          <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FindCustomer" ReturnType="Collection(SPPracticeModel.FindCustomer_Result)">
+          <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FindOrder" ReturnType="Collection(SPPracticeModel.FindOrder_Result)">
+          <Parameter Name="OrderNum" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OrderList" ReturnType="Collection(SPPracticeModel.OrderList_Result)">
+            <Parameter Name="Search" Mode="In" Type="String" />
+            <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+            <Parameter Name="SortOrder" Mode="In" Type="String" />
+            <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PageAgentList" ReturnType="Collection(SPPracticeModel.PageAgentList_Result)">
+            <Parameter Name="Search" Mode="In" Type="String" />
+            <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+            <Parameter Name="SortOrder" Mode="In" Type="String" />
+            <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ShowList" ReturnType="Collection(SPPracticeModel.ShowList_Result)">
+            <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+            <Parameter Name="Startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SortColumn" Mode="In" Type="Int32" />
+            <Parameter Name="SortOrder" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateAgent">
+            <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+            <Parameter Name="AgentName" Mode="In" Type="String" />
+            <Parameter Name="WorkingArea" Mode="In" Type="String" />
+            <Parameter Name="Commision" Mode="In" Type="String" />
+            <Parameter Name="PhoneNo" Mode="In" Type="String" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateCustomer">
+            <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="CustomerCity" Mode="In" Type="String" />
+            <Parameter Name="WorkingArea" Mode="In" Type="String" />
+            <Parameter Name="CustomerCountry" Mode="In" Type="String" />
+            <Parameter Name="Grade" Mode="In" Type="String" />
+            <Parameter Name="OpeningAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="RecevingAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="PaymentAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="OutstandingAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="PhoneNo" Mode="In" Type="String" />
+            <Parameter Name="AgentCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdeteOrder">
+            <Parameter Name="OrderNum" Mode="In" Type="Int32" />
+            <Parameter Name="OrderAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="AdvanceAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="CustomerCode" Mode="In" Type="Int32" />
+            <Parameter Name="OrderDescription" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="AgentList_Result">
+          <Property Type="Int32" Name="AgentCode" Nullable="false" />
+          <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Commission" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CustomerList_Result">
+          <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+          <Property Type="Int32" Name="AgentCode" Nullable="true" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="CustomerCity" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerCountry" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Gread" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="OpeningAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="RecevingAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PaymentAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="OutstandingAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="FindAgent_Result">
+          <Property Type="Int32" Name="AgentCode" Nullable="false" />
+          <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Commission" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="FindCustomer_Result">
+          <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerCity" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerCountry" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Gread" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="OpeningAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="RecevingAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PaymentAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="OutstandingAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="AgentCode" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="FindOrder_Result">
+          <Property Type="Int32" Name="OrderNum" Nullable="false" />
+          <Property Type="Decimal" Name="OrderAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="AdvanceAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="true" />
+          <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+          <Property Type="String" Name="OrderDescription" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OrderList_Result">
+          <Property Type="Int32" Name="OrderNum" Nullable="false" />
+          <Property Type="Int32" Name="CustomerCode" Nullable="false" />
+          <Property Type="Decimal" Name="OrderAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="AdvanceAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="true" />
+          <Property Type="String" Name="OrderDescription" Nullable="true" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="101" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PageAgentList_Result">
+          <Property Type="Int32" Name="AgentCode" Nullable="false" />
+          <Property Type="String" Name="AgentName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="WorkingArea" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Commission" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ShowList_Result">
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Summation" Nullable="true" Precision="38" Scale="0" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="true" />
+          <Property Type="Int32" Name="AgentCode" Nullable="true" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SPPracticeModelStoreContainer" CdmEntityContainer="SPPracticeEntities">
+          <EntitySetMapping Name="Agents">
+            <EntityTypeMapping TypeName="SPPracticeModel.Agent">
+              <MappingFragment StoreEntitySet="Agent">
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="SPPracticeModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="CustomerCountry" ColumnName="CustomerCountry" />
+                <ScalarProperty Name="Gread" ColumnName="Gread" />
+                <ScalarProperty Name="OpeningAmount" ColumnName="OpeningAmount" />
+                <ScalarProperty Name="RecevingAmount" ColumnName="RecevingAmount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="OutstandingAmount" ColumnName="OutstandingAmount" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="SPPracticeModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+                <ScalarProperty Name="OrderAmount" ColumnName="OrderAmount" />
+                <ScalarProperty Name="AdvanceAmount" ColumnName="AdvanceAmount" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="OrderDescription" ColumnName="OrderDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddAgent" FunctionName="SPPracticeModel.Store.AddAgent" />
+          <FunctionImportMapping FunctionImportName="AddCustomer" FunctionName="SPPracticeModel.Store.AddCustomer" />
+          <FunctionImportMapping FunctionImportName="AddOrder" FunctionName="SPPracticeModel.Store.AddOrder" />
+          <FunctionImportMapping FunctionImportName="AgentList" FunctionName="SPPracticeModel.Store.AgentList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.AgentList_Result">
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CustomerList" FunctionName="SPPracticeModel.Store.CustomerList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.CustomerList_Result">
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="CustomerCountry" ColumnName="CustomerCountry" />
+                <ScalarProperty Name="Gread" ColumnName="Gread" />
+                <ScalarProperty Name="OpeningAmount" ColumnName="OpeningAmount" />
+                <ScalarProperty Name="RecevingAmount" ColumnName="RecevingAmount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="OutstandingAmount" ColumnName="OutstandingAmount" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DeleteAgent" FunctionName="SPPracticeModel.Store.DeleteAgent" />
+          <FunctionImportMapping FunctionImportName="DeleteCustomer" FunctionName="SPPracticeModel.Store.DeleteCustomer" />
+          <FunctionImportMapping FunctionImportName="DeleteOrder" FunctionName="SPPracticeModel.Store.DeleteOrder" />
+          <FunctionImportMapping FunctionImportName="FindAgent" FunctionName="SPPracticeModel.Store.FindAgent">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.FindAgent_Result">
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FindCustomer" FunctionName="SPPracticeModel.Store.FindCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.FindCustomer_Result">
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="CustomerCountry" ColumnName="CustomerCountry" />
+                <ScalarProperty Name="Gread" ColumnName="Gread" />
+                <ScalarProperty Name="OpeningAmount" ColumnName="OpeningAmount" />
+                <ScalarProperty Name="RecevingAmount" ColumnName="RecevingAmount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="OutstandingAmount" ColumnName="OutstandingAmount" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FindOrder" FunctionName="SPPracticeModel.Store.FindOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.FindOrder_Result">
+                <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+                <ScalarProperty Name="OrderAmount" ColumnName="OrderAmount" />
+                <ScalarProperty Name="AdvanceAmount" ColumnName="AdvanceAmount" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="OrderDescription" ColumnName="OrderDescription" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OrderList" FunctionName="SPPracticeModel.Store.OrderList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.OrderList_Result">
+                <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="OrderAmount" ColumnName="OrderAmount" />
+                <ScalarProperty Name="AdvanceAmount" ColumnName="AdvanceAmount" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderDescription" ColumnName="OrderDescription" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PageAgentList" FunctionName="SPPracticeModel.Store.PageAgentList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.PageAgentList_Result">
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="WorkingArea" ColumnName="WorkingArea" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ShowList" FunctionName="SPPracticeModel.Store.ShowList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SPPracticeModel.ShowList_Result">
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Summation" ColumnName="Summation" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="AgentCode" ColumnName="AgentCode" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UpdateAgent" FunctionName="SPPracticeModel.Store.UpdateAgent" />
+          <FunctionImportMapping FunctionImportName="UpdateCustomer" FunctionName="SPPracticeModel.Store.UpdateCustomer" />
+          <FunctionImportMapping FunctionImportName="UpdeteOrder" FunctionName="SPPracticeModel.Store.UpdeteOrder" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
